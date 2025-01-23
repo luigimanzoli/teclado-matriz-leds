@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "author": "Luigi Manzoli Almeida Lopez",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-pi-pico-w",
+      "id": "pico",
+      "top": -70.45,
+      "left": -6.05,
+      "attrs": { "builder": "pico-sdk" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 128.75,
+      "left": -172.8,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-membrane-keypad",
+      "id": "keypad1",
+      "top": -453.2,
+      "left": -205.6,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 92.4,
+      "left": -255.4,
+      "attrs": { "color": "blue" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 80.75,
+      "left": -172.8,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": 34.8,
+      "left": -255.4,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led3",
+      "top": -22.8,
+      "left": -255.4,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": 32.75,
+      "left": -172.8,
+      "attrs": { "value": "1000" }
+    }
+  ],
+  "connections": [
+    [ "pico:GP0", "$serialMonitor:RX", "", [] ],
+    [ "pico:GP1", "$serialMonitor:TX", "", [] ],
+    [ "led1:A", "r1:1", "blue", [ "h0" ] ],
+    [ "led2:A", "r2:1", "green", [ "h0" ] ],
+    [ "led3:A", "r3:1", "red", [ "h0" ] ],
+    [ "keypad1:R1", "pico:GP1", "gray", [ "v0" ] ],
+    [ "keypad1:R2", "pico:GP2", "gray", [ "v0" ] ],
+    [ "keypad1:R3", "pico:GP3", "gray", [ "v0" ] ],
+    [ "keypad1:R4", "pico:GP4", "gray", [ "v0" ] ],
+    [ "keypad1:C1", "pico:GP5", "gray", [ "v0" ] ],
+    [ "keypad1:C2", "pico:GP6", "gray", [ "v0" ] ],
+    [ "keypad1:C3", "pico:GP7", "gray", [ "v0" ] ],
+    [ "keypad1:C4", "pico:GP8", "gray", [ "v0" ] ],
+    [ "led3:C", "led2:C", "black", [ "v0", "h-18.8", "v57.6" ] ],
+    [ "led2:C", "led1:C", "black", [ "v0", "h-18.8", "v57.6" ] ],
+    [ "led1:C", "pico:GND.4", "black", [ "v19.2", "h230.8", "v-48" ] ],
+    [ "r3:2", "pico:GP11", "red", [ "v0" ] ],
+    [ "r2:2", "pico:GP12", "green", [ "v0" ] ],
+    [ "r1:2", "pico:GP13", "blue", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
