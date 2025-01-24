@@ -156,6 +156,7 @@ int main()
         
         // Ação baseada na tecla pressionada
         switch(tecla) {
+            //caso usuario aperte 1 no teclado matricial
             case '1':
                 {
                     for(int j = 0; j< 6; j++){
@@ -172,6 +173,7 @@ int main()
         sleep_ms(200);
                     }
                 }  
+                //apaga o coracao
                  desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
                  sleep_ms(200);
                 break;
