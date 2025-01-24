@@ -89,6 +89,7 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
     }
 }
 
+
 const char teclado[4][4] = {
     {'1', '2', '3', 'A'}, 
     {'4', '5', '6', 'B'}, 
@@ -98,69 +99,42 @@ const char teclado[4][4] = {
 // Protótipo da função para leitura do teclado
 char leitura_teclado();
 
-//função principal
-int main()
-{
-    PIO pio = pio0; 
-    bool ok;
-    uint16_t i;
-    uint32_t valor_led;
-    double r = 0.0, b = 0.0 , g = 0.0;
-    //coloca a frequência de clock para 128 MHz, facilitando a divisão pelo clock
-    ok = set_sys_clock_khz(128000, false);
+// Inicializa o sistema de clock
+void inicializar_clock() {
+    bool ok = set_sys_clock_khz(128000, false);
+    if (ok) {
+        printf("Clock set to %ld\n", clock_get_hz(clk_sys));
+    } else {
+        printf("Falha ao configurar o clock\n");
+    }
+}
 
-    // Inicializa todos os códigos stdio padrão que estão ligados ao binário.
-    stdio_init_all();
-
-    printf("iniciando a transmissão PIO");
-    if (ok) printf("clock set to %ld\n", clock_get_hz(clk_sys));
-
-
-    // Inicializa todos os códigos stdio padrão que estão ligados ao binário.
-    stdio_init_all();
-        //configurações da PIO
-    uint offset = pio_add_program(pio, &pio_matrix_program);
-    uint sm = pio_claim_unused_sm(pio, true);
-    pio_matrix_program_init(pio, sm, offset, OUT_PIN);
-
-    // Inicialização dos pinos das colunas do teclado como saída
+// Configura os pinos do teclado matricial
+void configurar_teclado(const uint *colunas, const uint *linhas) {
     for (int i = 0; i < 4; i++) {
         gpio_init(colunas[i]);
         gpio_set_dir(colunas[i], GPIO_OUT);
         gpio_put(colunas[i], 1); // Colunas inicialmente em nível alto
     }
 
-    // Inicialização dos pinos das linhas do teclado como entrada com pull-up
     for (int i = 0; i < 4; i++) {
         gpio_init(linhas[i]);
         gpio_set_dir(linhas[i], GPIO_IN);
-        gpio_pull_up(linhas[i]);
+        gpio_pull_up(linhas[i]); // Linhas com pull-up ativado
     }
-    // Inicialização dos pinos das colunas do teclado como saída
-    for (int i = 0; i < 4; i++) {
-        gpio_init(colunas[i]);
-        gpio_set_dir(colunas[i], GPIO_OUT);
-        gpio_put(colunas[i], 1); // Colunas inicialmente em nível alto
-    }
+}
 
-    // Inicialização dos pinos das linhas do teclado como entrada com pull-up
-    for (int i = 0; i < 4; i++) {
-        gpio_init(linhas[i]);
-        gpio_set_dir(linhas[i], GPIO_IN);
-        gpio_pull_up(linhas[i]);
-    }
-    while (true) {
-    
-    while (true) {
-    char tecla = leitura_teclado(); // Leitura do teclado
-        
-        // Ação baseada na tecla pressionada
-        switch(tecla) {
-            //caso usuario aperte 1 no teclado matricial
-            case '1':
-                {
-                    for(int j = 0; j< 6; j++){
-        //rotina para fazer coracao batendo
+// Configura a PIO
+void configurar_pio(PIO pio, uint *offset, uint *sm) {
+    *offset = pio_add_program(pio, &pio_matrix_program);
+    *sm = pio_claim_unused_sm(pio, true);
+    pio_matrix_program_init(pio, *sm, *offset, OUT_PIN);
+}
+
+// Realiza a animação do coração batendo
+void animacao_coracao(double *desenho_mt_pequeno, double *desenho_pequeno, double *desenho_medio, double *desenho_grande, 
+                      double *desenho_mt_grande, double *desenho_apagado, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
+    for (int j = 0; j < 6; j++) {
         desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
         desenho_pio(desenho_pequeno, valor_led, pio, sm, r, g, b);
@@ -171,24 +145,49 @@ int main()
         sleep_ms(200);
         desenho_pio(desenho_mt_grande, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
-                    }
-                }  
-                //apaga o coracao
-                 desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
-                 sleep_ms(200);
+    }
+    desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
+    sleep_ms(200);
+}
+
+// Função principal
+int main() {
+    PIO pio = pio0;
+    uint offset, sm;
+    uint32_t valor_led;
+    double r = 0.0, b = 0.0, g = 0.0;
+
+    // Colunas e linhas do teclado
+    const uint colunas[4] = {2, 3, 4, 5}; // Ajuste os números dos pinos conforme necessário
+    const uint linhas[4] = {6, 7, 8, 9}; // Ajuste os números dos pinos conforme necessário
+
+    // Inicializa clock, stdio e configurações
+    stdio_init_all();
+    inicializar_clock();
+    configurar_teclado(colunas, linhas);
+    configurar_pio(pio, &offset, &sm);
+
+    printf("Sistema inicializado. Aguardando entrada...\n");
+
+    while (true) {
+        char tecla = leitura_teclado(); // Leitura do teclado
+
+        switch (tecla) {
+            case '1': // Caso o usuário aperte "1"
+                animacao_coracao(desenho_mt_pequeno, desenho_pequeno, desenho_medio, desenho_grande, 
+                                 desenho_mt_grande, desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
-            default:
+
+            default: // Para outras teclas ou nenhuma tecla pressionada
                 desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
         }
-        
-        sleep_ms(200); // Atraso para evitar múltiplas leituras da mesma tecla
+
+        sleep_ms(200); // Atraso para evitar múltiplas leituras
     }
 
     return 0;
 }
-}
-
 // Função para leitura do teclado matricial
 char leitura_teclado() {
     char numero = 'n'; // Valor padrão caso nenhuma tecla seja pressionada
