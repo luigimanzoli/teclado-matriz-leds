@@ -28,35 +28,41 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(teclado C CXX ASM)
+project(matriz_led C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(teclado teclado.c )
+add_executable(matriz_led matriz_led.c )
 
-pico_set_program_name(teclado "teclado")
-pico_set_program_version(teclado "0.1")
+pico_set_program_name(matriz_led "matriz_led")
+pico_set_program_version(matriz_led "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(teclado 1)
-pico_enable_stdio_usb(teclado 0)
+pico_enable_stdio_uart(matriz_led 0)
+pico_enable_stdio_usb(matriz_led 1)
+
+pico_generate_pio_header(matriz_led ${CMAKE_CURRENT_LIST_DIR}/matriz_led.pio)
+
+target_sources(matriz_led PRIVATE matriz_led.c)
 
 # Add the standard library to the build
-target_link_libraries(teclado
-        pico_stdlib)
+target_link_libraries(matriz_led PRIVATE
+        pico_stdlib
+        hardware_pio
+	    hardware_adc
+        pico_bootrom)
 
 # Add the standard include files to the build
-target_include_directories(teclado PRIVATE
+target_include_directories(matriz_led PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )
 
 # Add any user requested libraries
-target_link_libraries(teclado 
-        pico_cyw43_arch_none
+target_link_libraries(matriz_led 
+        
         )
 
-pico_add_extra_outputs(teclado)
-
+pico_add_extra_outputs(matriz_led)
