@@ -202,7 +202,7 @@ void animacao_coracao(double *desenho_mt_pequeno, double *desenho_pequeno, doubl
                       double *desenho_mt_grande, double *desenho_apagado, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
     for (int j = 0; j < 6; j++) //quantidade de vezes que ele batera
      {
-        desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
+      desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
         desenho_pio(desenho_pequeno, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
@@ -211,6 +211,14 @@ void animacao_coracao(double *desenho_mt_pequeno, double *desenho_pequeno, doubl
         desenho_pio(desenho_grande, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
         desenho_pio(desenho_mt_grande, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_pio(desenho_grande, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_pio(desenho_medio, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_pio(desenho_pequeno, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
     }
     desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
