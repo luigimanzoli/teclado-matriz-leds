@@ -59,13 +59,6 @@ double frame_full[25] ={1.0, 1.0, 1.0, 1.0, 1.0,
                         1.0, 1.0, 1.0, 1.0, 1.0,
                         1.0, 1.0, 1.0, 1.0, 1.0};
 
-//imprimir valor binário
-void imprimir_binario(int num) {
- int i;
- for (i = 31; i >= 0; i--) {
-  (num & (1 << i)) ? printf("1") : printf("0");
- }
-}
 
 //rotina da interrupção
 static void gpio_irq_handler(uint gpio, uint32_t events){
@@ -98,10 +91,9 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
             pio_sm_put_blocking(pio, sm, valor_led);
         }
     }
-    imprimir_binario(valor_led);
 }
 
-void animation1(void){
+void animation1(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
 
     double frame1[25] ={0.0, 0.0, 0.0, 0.0, 0.0,
                         0.0, 0.0, 0.0, 0.0, 0.0, 
@@ -133,50 +125,59 @@ void animation1(void){
                         1.0, 0.0, 0.0, 0.0, 1.0,
                         1.0, 1.0, 1.0, 1.0, 1.0};
 
-    PIO pio = pio0; 
-    bool ok;
-    uint16_t i;
-    uint32_t valor_led;
-    double r = 0.0, b = 0.0 , g = 0.0;
 
-    //configurações da PIO
-    uint offset = pio_add_program(pio, &matriz_led_program);
-    uint sm = pio_claim_unused_sm(pio, true);
-    matriz_led_program_init(pio, sm, offset, OUT_PIN);
-
-    desenho_pio(frame1, valor_led, pio, sm, r, g, b);
-    sleep_ms(10);
-    desenho_pio(frame2, valor_led, pio, sm, r, g, b);
-    sleep_ms(10);
-    desenho_pio(frame3, valor_led, pio, sm, r, g, b);
-    sleep_ms(10);
-    desenho_pio(frame4, valor_led, pio, sm, r, g, b);
-    sleep_ms(10);
-    desenho_pio(frame5, valor_led, pio, sm, r, g, b);
-
-
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame1[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame2[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame3[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame4[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame5[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
 }
 
 // ----------------------------------------------------------
 
-void init_led() {
-    gpio_init(RLED_PIN);
-    gpio_set_dir(RLED_PIN, GPIO_OUT);
-    gpio_put(RLED_PIN, 0);
+void init_buttons() {
+//inicializar o botão de interrupção - GPIO5
+    gpio_init(BTNA);
+    gpio_set_dir(BTNA, GPIO_IN);
+    gpio_pull_up(BTNA);
 
-    gpio_init(GLED_PIN);
-    gpio_set_dir(GLED_PIN, GPIO_OUT);
-    gpio_put(GLED_PIN, 0);
+    //inicializar o botão de interrupção - GPIO5
+    gpio_init(BTNB);
+    gpio_set_dir(BTNB, GPIO_IN);
+    gpio_pull_up(BTNB);
 
-    gpio_init(BLED_PIN);
-    gpio_set_dir(BLED_PIN, GPIO_OUT);
-    gpio_put(BLED_PIN, 0);
+    //interrupção da gpio habilitada
+    gpio_set_irq_enabled_with_callback(BTNA, GPIO_IRQ_EDGE_FALL, 1, & gpio_irq_handler);
 }
 
-void get_led(bool R, bool G, bool B) {
-    gpio_put(RLED_PIN, R);
-    gpio_put(GLED_PIN, G);
-    gpio_put(BLED_PIN, B);
+void init_clock() {
+    bool ok;
+
+    //coloca a frequência de clock para 128 MHz, facilitando a divisão pelo clock
+    ok = set_sys_clock_khz(128000, false);
+
+    printf("iniciando a transmissão PIO");
+    if (ok) printf("clock set to %ld\n", clock_get_hz(clk_sys));
 }
 
 // Mapeamento das teclas em uma matriz 4x4
@@ -219,42 +220,21 @@ char leitura_teclado() {
 }
 
 int main() {
+
     stdio_init_all();
     init_teclado();
+    init_buttons();
 
     PIO pio = pio0; 
-    bool ok;
     uint16_t i;
     uint32_t valor_led;
     double r = 0.0, b = 0.0 , g = 0.0;
-
-    //coloca a frequência de clock para 128 MHz, facilitando a divisão pelo clock
-    ok = set_sys_clock_khz(128000, false);
-
-    // Inicializa todos os códigos stdio padrão que estão ligados ao binário.
-    stdio_init_all();
-
-    printf("iniciando a transmissão PIO");
-    if (ok) printf("clock set to %ld\n", clock_get_hz(clk_sys));
 
     //configurações da PIO
     uint offset = pio_add_program(pio, &matriz_led_program);
     uint sm = pio_claim_unused_sm(pio, true);
     matriz_led_program_init(pio, sm, offset, OUT_PIN);
-
-    //inicializar o botão de interrupção - GPIO5
-    gpio_init(BTNA);
-    gpio_set_dir(BTNA, GPIO_IN);
-    gpio_pull_up(BTNA);
-
-    //inicializar o botão de interrupção - GPIO5
-    gpio_init(BTNB);
-    gpio_set_dir(BTNB, GPIO_IN);
-    gpio_pull_up(BTNB);
-
-    //interrupção da gpio habilitada
-    gpio_set_irq_enabled_with_callback(BTNA, GPIO_IRQ_EDGE_FALL, 1, & gpio_irq_handler);
-
+    
     while (true) {
     
         char key = leitura_teclado();
@@ -269,8 +249,9 @@ int main() {
             sleep_ms(100);
         }
         else if (key == 'B'){
-            desenho_pio(frame_full, valor_led, pio, sm, 0.0, 0.0, 1.0);
-            sleep_ms(100);
+            animation1(valor_led, pio, sm, r, g, b);
+            //desenho_pio(frame_full, valor_led, pio, sm, 0.0, 0.0, 1.0);
+            //sleep_ms(100);
         }
         else
         {
