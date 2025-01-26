@@ -47,7 +47,7 @@ double desenho2[25] =   {1.0, 0.0, 0.0, 0.0, 1.0,
                         0.0, 1.0, 0.0, 1.0, 0.0,
                         1.0, 0.0, 0.0, 0.0, 1.0};
 
-double frame_null[25] =     {0.0, 0.0, 0.0, 0.0, 0.0,
+double frame_null[25] = {0.0, 0.0, 0.0, 0.0, 0.0,
                         0.0, 0.0, 0.0, 0.0, 0.0, 
                         0.0, 0.0, 0.0, 0.0, 0.0,
                         0.0, 0.0, 0.0, 0.0, 0.0,
@@ -90,6 +90,36 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
             valor_led = matrix_rgb(b=0.0, desenho[24-i], g=0.0);
             pio_sm_put_blocking(pio, sm, valor_led);
         }
+    }
+}
+
+void full_blue(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(frame_full[24-i], r=0.0, g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+}
+
+void full_red(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, 0.8*frame_full[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+}
+
+void full_green(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, r=0.0 , 0.5*frame_full[24-i]);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+}
+
+void full_white(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(0.2*frame_full[24-i],0.2*frame_full[24-i],0.2*frame_full[24-i]);
+        pio_sm_put_blocking(pio, sm, valor_led);
     }
 }
 
@@ -249,17 +279,25 @@ int main() {
             sleep_ms(100);
         }
         else if (key == 'B'){
+            full_blue(valor_led, pio, sm, r, g, b);
+        }
+        else if (key == 'C'){
+            full_red(valor_led, pio, sm, r, g, b);
+        }
+        else if (key == 'D'){
+            full_green(valor_led, pio, sm, r, g, b);
+        }
+        else if (key == '#'){
+            full_white(valor_led, pio, sm, r, g, b);
+        }
+        else if (key == '1'){
             animation1(valor_led, pio, sm, r, g, b);
-            //desenho_pio(frame_full, valor_led, pio, sm, 0.0, 0.0, 1.0);
-            //sleep_ms(100);
         }
         else
         {
             //rotina para escrever na matriz de leds com o emprego de PIO - desenho 1
             desenho_pio(desenho2, valor_led, pio, sm, r, g, b);
         }
-
         sleep_ms(500);
-        printf("\nfrequeência de clock %ld\r\n", clock_get_hz(clk_sys));
     }
 }
