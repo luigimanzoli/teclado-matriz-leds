@@ -47,6 +47,18 @@ double desenho2[25] =   {1.0, 0.0, 0.0, 0.0, 1.0,
                         0.0, 1.0, 0.0, 1.0, 0.0,
                         1.0, 0.0, 0.0, 0.0, 1.0};
 
+double frame_null[25] =     {0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0, 
+                        0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0};
+
+double frame_full[25] ={1.0, 1.0, 1.0, 1.0, 1.0,
+                        1.0, 1.0, 1.0, 1.0, 1.0, 
+                        1.0, 1.0, 1.0, 1.0, 1.0,
+                        1.0, 1.0, 1.0, 1.0, 1.0,
+                        1.0, 1.0, 1.0, 1.0, 1.0};
+
 //imprimir valor binário
 void imprimir_binario(int num) {
  int i;
@@ -87,6 +99,62 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
         }
     }
     imprimir_binario(valor_led);
+}
+
+void animation1(void){
+
+    double frame1[25] ={0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0, 
+                        0.0, 0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0};
+
+    double frame2[25] ={0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0, 0.0, 
+                        0.0, 1.0, 0.0, 1.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    double frame3[25] ={0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 1.0, 1.0, 0.0, 
+                        0.0, 1.0, 0.0, 1.0, 0.0,
+                        0.0, 1.0, 1.0, 1.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    double frame4[25] ={0.0, 0.0, 1.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 1.0, 0.0, 
+                        1.0, 0.0, 0.0, 0.0, 1.0,
+                        0.0, 1.0, 0.0, 1.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame5[25] ={1.0, 1.0, 1.0, 1.0, 1.0,
+                        1.0, 0.0, 0.0, 0.0, 1.0, 
+                        1.0, 0.0, 0.0, 0.0, 1.0,
+                        1.0, 0.0, 0.0, 0.0, 1.0,
+                        1.0, 1.0, 1.0, 1.0, 1.0};
+
+    PIO pio = pio0; 
+    bool ok;
+    uint16_t i;
+    uint32_t valor_led;
+    double r = 0.0, b = 0.0 , g = 0.0;
+
+    //configurações da PIO
+    uint offset = pio_add_program(pio, &matriz_led_program);
+    uint sm = pio_claim_unused_sm(pio, true);
+    matriz_led_program_init(pio, sm, offset, OUT_PIN);
+
+    desenho_pio(frame1, valor_led, pio, sm, r, g, b);
+    sleep_ms(10);
+    desenho_pio(frame2, valor_led, pio, sm, r, g, b);
+    sleep_ms(10);
+    desenho_pio(frame3, valor_led, pio, sm, r, g, b);
+    sleep_ms(10);
+    desenho_pio(frame4, valor_led, pio, sm, r, g, b);
+    sleep_ms(10);
+    desenho_pio(frame5, valor_led, pio, sm, r, g, b);
+
+
 }
 
 // ----------------------------------------------------------
@@ -151,6 +219,8 @@ char leitura_teclado() {
 }
 
 int main() {
+    stdio_init_all();
+    init_teclado();
 
     PIO pio = pio0; 
     bool ok;
@@ -187,18 +257,28 @@ int main() {
 
     while (true) {
     
-    if(gpio_get(BTNB)) //botão em nível alto
-    {
-        //rotina para escrever na matriz de leds com o emprego de PIO - desenho 2
-        desenho_pio(desenho, valor_led, pio, sm, r, g, b);
-    }
-    else
-    {
-        //rotina para escrever na matriz de leds com o emprego de PIO - desenho 1
-        desenho_pio(desenho2, valor_led, pio, sm, r, g, b);
-    }
+        char key = leitura_teclado();
 
-    sleep_ms(500);
-    printf("\nfrequeência de clock %ld\r\n", clock_get_hz(clk_sys));
+        if(!gpio_get(BTNB)) //botão em nível alto
+        {
+            //rotina para escrever na matriz de leds com o emprego de PIO - desenho 2
+            desenho_pio(desenho, valor_led, pio, sm, r, g, b);
+        }
+        else if (key == 'A'){
+            desenho_pio(frame_null, valor_led, pio, sm, r, g, b);
+            sleep_ms(100);
+        }
+        else if (key == 'B'){
+            desenho_pio(frame_full, valor_led, pio, sm, 0.0, 0.0, 1.0);
+            sleep_ms(100);
+        }
+        else
+        {
+            //rotina para escrever na matriz de leds com o emprego de PIO - desenho 1
+            desenho_pio(desenho2, valor_led, pio, sm, r, g, b);
+        }
+
+        sleep_ms(500);
+        printf("\nfrequeência de clock %ld\r\n", clock_get_hz(clk_sys));
     }
 }
