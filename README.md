@@ -1,1 +1,1 @@
-# Tarefa 1 - Unidade 4 Capítulo 3 Aula Síncrona 20/01
+Leitura de botão no GPIO 6 e acionamento da Matriz de Leds pela GPIO 07.
