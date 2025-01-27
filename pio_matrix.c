@@ -300,6 +300,60 @@ void todos_branco(double *luz_20_total, uint32_t valor_led, PIO pio, uint sm, do
     desenho_branco(luz_50_total, valor_led, pio, sm, r, g, b);
 }
 
+void cacto(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+
+double frame1[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame2[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame3[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 
+        0.0, 1.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame4[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 1.0,
+        0.0, 0.0, 1.0, 1.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame5[25] = {
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+        
+for (int frame = 0; frame < 5; frame++){
+    double* frame_atual;
+
+    if (frame==0) frame_atual = frame1;
+    else if(frame == 1) frame_atual = frame2;
+    else if(frame == 2) frame_atual = frame3;
+    else if(frame== 3) frame_atual = frame4;
+    else frame_atual = frame5;
+
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+    valor_led = matrix_rgb(0.0, 0.0, frame_atual[24-i]);
+     pio_sm_put_blocking(pio, sm, valor_led);
+    }
+     sleep_ms(300);
+}
+}
+
 // Função principal
 int main() {
     PIO pio = pio0;
@@ -330,6 +384,9 @@ int main() {
                 break;
             case '2':
                 animation2(valor_led, pio, sm, r, g, b);
+                break;
+            case '4':
+                cacto(valor_led, pio, sm, r, g, b);
                 break;
             case 'A':
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
