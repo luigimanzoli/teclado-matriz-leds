@@ -224,17 +224,19 @@ void animacao_coracao(double *desenho_mt_pequeno, double *desenho_pequeno, doubl
     desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
     sleep_ms(200);
 }
-
+//funcao para acender todos os leds azul
 void todos_azul(double *luz_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_azul(luz_total,valor_led, pio, sm, r, g, b );
 }
-
+//funcao para acender todos os leds vermelho
 void todos_vermelho(double *luz_80_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_pio(luz_80_total, valor_led, pio, sm, r, g, b);    
 }
+//funcao para acender todos os leds verde
 void todos_verde(double *luz_50_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_verde(luz_50_total, valor_led, pio, sm, r, g, b); 
 }
+//funcao para acender todos os leds branco
 void todos_branco(double *luz_20_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_branco(luz_50_total, valor_led, pio, sm, r, g, b);
 }
