@@ -289,7 +289,7 @@ void animation2(uint32_t valor_led, PIO pio, uint sm, double r, double g, double
 
 void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
 
-    double frame1[25] ={
+    double frame_1[25] ={
         0.0, 0.0, 0.0, 0.0, 0.0,
         0.0, 0.0, 0.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0, 0.0,
@@ -297,7 +297,7 @@ void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double
         0.0, 0.0, 0.0, 0.0, 0.0
     };
 
-    double frame2[25] ={
+    double frame_2[25] ={
         0.0, 0.0, 0.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 1.0, 0.0,
@@ -305,7 +305,7 @@ void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double
         0.0, 0.0, 0.0, 0.0, 0.0
     };
 
-    double frame3[25] ={
+    double frame_3[25] ={
         0.0, 0.0, 1.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 1.0, 0.0,
         1.0, 0.0, 1.0, 0.0, 1.0,
@@ -313,7 +313,7 @@ void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double
         0.0, 0.0, 1.0, 0.0, 0.0
     };
 
-    double frame4[25] ={
+    double frame_4[25] ={
          0.0, 1.0, 0.0, 1.0, 0.0,
         1.0, 0.0, 1.0, 0.0, 1.0,
         0.0, 1.0, 0.0, 1.0, 0.0,
@@ -321,7 +321,7 @@ void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double
         0.0, 1.0, 0.0, 1.0, 0.0
     };
 
-    double frame5[25] ={
+    double frame_5[25] ={
          1.0, 0.0, 1.0, 0.0, 1.0,
         0.0, 1.0, 0.0, 1.0, 0.0,
         1.0, 0.0, 1.0, 0.0, 1.0,
@@ -330,15 +330,15 @@ void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double
     };
 
     for(int i = 0; i < 5; i++){
-        desenho_azul(frame1, valor_led, pio, sm, r, g, b);
+        desenho_azul(frame_1, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
-        desenho_azul(frame2, valor_led, pio, sm, r, g, b);
+        desenho_azul(frame_2, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
-        desenho_azul(frame3, valor_led, pio, sm, r, g, b);
+        desenho_azul(frame_3, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
-        desenho_azul(frame4, valor_led, pio, sm, r, g, b);
+        desenho_azul(frame_4, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
-        desenho_azul(frame5, valor_led, pio, sm, r, g, b);
+        desenho_azul(frame_5, valor_led, pio, sm, r, g, b);
         sleep_ms(200);
     }
     desenho_azul(desenho_apagado, valor_led, pio, sm, r, g, b);

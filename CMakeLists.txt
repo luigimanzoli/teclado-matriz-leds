@@ -59,4 +59,3 @@ target_link_libraries(teclado
         )
 
 pico_add_extra_outputs(teclado)
-
