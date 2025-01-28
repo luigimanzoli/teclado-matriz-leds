@@ -226,7 +226,7 @@ void todos_verde(double *luz_50_total, uint32_t valor_led, PIO pio, uint sm, dou
 }
 //funcao para acender todos os leds branco
 void todos_branco(double *luz_20_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
-    desenho_branco(luz_50_total, valor_led, pio, sm, r, g, b);
+    desenho_branco(luz_20_total, valor_led, pio, sm, r, g, b);
 }
 
 // Função principal
