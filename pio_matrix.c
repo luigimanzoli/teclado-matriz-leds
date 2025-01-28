@@ -287,6 +287,66 @@ void animation2(uint32_t valor_led, PIO pio, uint sm, double r, double g, double
     sleep_ms(100);
 }
 
+
+void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+
+    double frame_1[25] ={
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0
+    };
+
+    double frame_2[25] ={
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0
+    };
+
+    double frame_3[25] ={
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0
+    };
+
+    double frame_4[25] ={
+         0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0
+    };
+
+    double frame_5[25] ={
+         1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0
+    };
+
+    for(int i = 0; i < 5; i++){
+        desenho_azul(frame_1, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_2, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_3, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_4, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_5, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+    }
+    desenho_azul(desenho_apagado, valor_led, pio, sm, r, g, b);
+    sleep_ms(200);
+
+}
+
 void todos_azul(double *luz_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_azul(luz_total,valor_led, pio, sm, r, g, b );
 }
@@ -433,9 +493,13 @@ int main() {
                 break;
             case '3':
                 animation_multicolor(valor_led, pio, sm);
+                break;
             case '4':
                 cacto(valor_led, pio, sm, r, g, b);
                 break;
+            case '5': //caso aperte "3"
+                animation3(valor_led, pio, sm, r, g, b);
+                break;  
             case 'A':
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
