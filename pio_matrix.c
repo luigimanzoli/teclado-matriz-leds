@@ -26,48 +26,7 @@ double desenho_apagado[25] = {
     0.0, 0.0, 0.0, 0.0, 0.0
 };
 
-double desenhos_coracao[5][25] = {
-//desenho com intensidade muito baixa de coracao
-    {
-    0.0, 0.1, 0.0, 0.1, 0.0,
-    0.1, 0.0, 0.1, 0.0, 0.1,
-    0.1, 0.0, 0.0, 0.0, 0.1,
-    0.0, 0.1, 0.0, 0.1, 0.0,
-    0.0, 0.0, 0.1, 0.0, 0.0
-},
-//desenho com intensidade baixa de coracao
- {
-    0.0, 0.3, 0.0, 0.3, 0.0,
-    0.3, 0.0, 0.3, 0.0, 0.3,
-    0.3, 0.0, 0.0, 0.0, 0.3,
-    0.0, 0.3, 0.0, 0.3, 0.0,
-    0.0, 0.0, 0.3, 0.0, 0.0
-},
-//desenho com intensidade media de coracao
-{
-    0.0, 0.5, 0.0, 0.5, 0.0,
-    0.5, 0.0, 0.5, 0.0, 0.5,
-    0.5, 0.0, 0.0, 0.0, 0.5,
-    0.0, 0.5, 0.0, 0.5, 0.0,
-    0.0, 0.0, 0.5, 0.0, 0.0
-},
-//desenho com intensidade alta de coracao
-{
-    0.0, 0.7, 0.0, 0.7, 0.0,
-    0.7, 0.0, 0.7, 0.0, 0.7,
-    0.7, 0.0, 0.0, 0.0, 0.7,
-    0.0, 0.7, 0.0, 0.7, 0.0,
-    0.0, 0.0, 0.7, 0.0, 0.0
-},
-//desenho com intensidade muito alta de coracao
- {
-    0.0, 0.9, 0.0, 0.9, 0.0,
-    0.9, 0.0, 0.9, 0.0, 0.9,
-    0.9, 0.0, 0.0, 0.0, 0.9,
-    0.0, 0.9, 0.0, 0.9, 0.0,
-    0.0, 0.0, 0.9, 0.0, 0.0
- }
-};
+
 //ativando todas as cores
 double luz_total[25] = {
     1.0, 1.0, 1.0, 1.0, 1.0,
@@ -201,7 +160,52 @@ void configurar_pio(PIO pio, uint *offset, uint *sm) {
 
 // Realiza a animação do coração batendo
 void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
-    int sequencia[] = {0, 1, 2, 3, 4, 3, 2, 1, 0}; // Ordem dos desenhos do coração
+    //desenho muito pequeno de coracao
+   double desenhos_coracao[5][25] = {
+//desenho com intensidade muito baixa de coracao
+    {
+    0.0, 0.1, 0.0, 0.1, 0.0,
+    0.1, 0.0, 0.1, 0.0, 0.1,
+    0.1, 0.0, 0.0, 0.0, 0.1,
+    0.0, 0.1, 0.0, 0.1, 0.0,
+    0.0, 0.0, 0.1, 0.0, 0.0
+},
+//desenho com intensidade baixa de coracao
+ {
+    0.0, 0.3, 0.0, 0.3, 0.0,
+    0.3, 0.0, 0.3, 0.0, 0.3,
+    0.3, 0.0, 0.0, 0.0, 0.3,
+    0.0, 0.3, 0.0, 0.3, 0.0,
+    0.0, 0.0, 0.3, 0.0, 0.0
+},
+//desenho com intensidade media de coracao
+{
+    0.0, 0.5, 0.0, 0.5, 0.0,
+    0.5, 0.0, 0.5, 0.0, 0.5,
+    0.5, 0.0, 0.0, 0.0, 0.5,
+    0.0, 0.5, 0.0, 0.5, 0.0,
+    0.0, 0.0, 0.5, 0.0, 0.0
+},
+//desenho com intensidade alta de coracao
+{
+    0.0, 0.7, 0.0, 0.7, 0.0,
+    0.7, 0.0, 0.7, 0.0, 0.7,
+    0.7, 0.0, 0.0, 0.0, 0.7,
+    0.0, 0.7, 0.0, 0.7, 0.0,
+    0.0, 0.0, 0.7, 0.0, 0.0
+},
+//desenho com intensidade muito alta de coracao
+ {
+    0.0, 0.9, 0.0, 0.9, 0.0,
+    0.9, 0.0, 0.9, 0.0, 0.9,
+    0.9, 0.0, 0.0, 0.0, 0.9,
+    0.0, 0.9, 0.0, 0.9, 0.0,
+    0.0, 0.0, 0.9, 0.0, 0.0
+ }
+   };
+
+
+int sequencia[] = {0, 1, 2, 3, 4, 3, 2, 1, 0}; // Ordem dos desenhos do coração
     for (int j = 0; j < 6; j++) { // Quantidade de vezes que o coração bate
         for (int i = 0; i < sizeof(sequencia) / sizeof(sequencia[0]); i++) {
             desenho_pio(desenhos_coracao[sequencia[i]], valor_led, pio, sm, r, g, b);
@@ -212,21 +216,238 @@ void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, 
     desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
     sleep_ms(200);
 }
-//funcao para acender todos os leds azul
+
+void animation2(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+
+    double frame1[25] ={0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0, 
+                        0.0, 0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0};
+
+    double frame2[25] ={0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0, 0.0, 
+                        0.0, 1.0, 0.0, 1.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    double frame3[25] ={0.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 1.0, 1.0, 1.0, 0.0, 
+                        0.0, 1.0, 0.0, 1.0, 0.0,
+                        0.0, 1.0, 1.0, 1.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    double frame4[25] ={0.0, 0.0, 1.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0, 1.0, 0.0, 
+                        1.0, 0.0, 0.0, 0.0, 1.0,
+                        0.0, 1.0, 0.0, 1.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame5[25] ={1.0, 1.0, 1.0, 1.0, 1.0,
+                        1.0, 0.0, 0.0, 0.0, 1.0, 
+                        1.0, 0.0, 0.0, 0.0, 1.0,
+                        1.0, 0.0, 0.0, 0.0, 1.0,
+                        1.0, 1.0, 1.0, 1.0, 1.0};
+
+
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame1[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame2[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame3[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame4[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+        valor_led = matrix_rgb(b=0.0, frame5[24-i], g=0.0);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    sleep_ms(100);
+}
+
+
+void animation3(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+
+    double frame_1[25] ={
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0
+    };
+
+    double frame_2[25] ={
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0
+    };
+
+    double frame_3[25] ={
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0
+    };
+
+    double frame_4[25] ={
+         0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0
+    };
+
+    double frame_5[25] ={
+         1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0, 0.0,
+        1.0, 0.0, 1.0, 0.0, 1.0
+    };
+
+    for(int i = 0; i < 5; i++){
+        desenho_azul(frame_1, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_2, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_3, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_4, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+        desenho_azul(frame_5, valor_led, pio, sm, r, g, b);
+        sleep_ms(200);
+    }
+    desenho_azul(desenho_apagado, valor_led, pio, sm, r, g, b);
+    sleep_ms(200);
+
+}
+
 void todos_azul(double *luz_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_azul(luz_total,valor_led, pio, sm, r, g, b );
 }
-//funcao para acender todos os leds vermelho
 void todos_vermelho(double *luz_80_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_pio(luz_80_total, valor_led, pio, sm, r, g, b);    
 }
-//funcao para acender todos os leds verde
 void todos_verde(double *luz_50_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
     desenho_verde(luz_50_total, valor_led, pio, sm, r, g, b); 
 }
-//funcao para acender todos os leds branco
 void todos_branco(double *luz_20_total, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b ){
-    desenho_branco(luz_20_total, valor_led, pio, sm, r, g, b);
+    desenho_branco(luz_50_total, valor_led, pio, sm, r, g, b);
+}
+
+void cacto(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+
+double frame1[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame2[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame3[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 
+        0.0, 1.0, 1.0, 0.0, 0.0,
+        0.0, 1.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame4[25] = {
+        0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+    
+    double frame5[25] = {
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        1.0, 0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0, 0.0};
+        
+for (int frame = 0; frame < 5; frame++){
+    double* frame_atual;
+
+    if (frame==0) frame_atual = frame1;
+    else if(frame == 1) frame_atual = frame2;
+    else if(frame == 2) frame_atual = frame3;
+    else if(frame== 3) frame_atual = frame4;
+    else frame_atual = frame5;
+
+    for (int16_t i = 0; i < NUM_PIXELS; i++){
+    valor_led = matrix_rgb(0.0, 0.0, frame_atual[24-i]);
+     pio_sm_put_blocking(pio, sm, valor_led);
+    }
+     sleep_ms(1000);
+  }
+}
+
+void animation_multicolor(uint32_t valor_led, PIO pio, uint sm) {
+    double frames[5][25][3] = {
+        // Frame 1
+        {{1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0},
+         {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0},
+         {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0},
+         {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0},
+         {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
+        // Frame 2
+        {{0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0},
+         {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0},
+         {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0},
+         {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0},
+         {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}},
+        // Frame 3
+        {{0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0},
+         {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0},
+         {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0},
+         {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0},
+         {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}},
+        // Frame 4
+        {{1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0},
+         {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0},
+         {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0},
+         {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0},
+         {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}},
+        // Frame 5
+        {{0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0}, {0.0, 1.0, 1.0},
+         {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0},
+         {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 0.0},
+         {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, 1.0},
+         {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 1.0, 0.0}}
+    };
+
+    for (int frame = 0; frame < 5; frame++) {
+        for (int16_t i = 0; i < NUM_PIXELS; i++) {
+            double r = frames[frame][i][0];
+            double g = frames[frame][i][1];
+            double b = frames[frame][i][2];
+            valor_led = matrix_rgb(r, g, b);
+            pio_sm_put_blocking(pio, sm, valor_led);
+        }
+        sleep_ms(500); // Tempo de exibição de cada frame
+    }
 }
 
 // Função principal
@@ -256,20 +477,32 @@ int main() {
         switch (tecla) {
             case '1': // Caso o usuário aperte "1" 
                 animacao_coracao(valor_led, pio, sm, r, g, b);
-                break; 
-            case 'A':
+                break;
+            case '2': //caso aperte "2"
+                animation2(valor_led, pio, sm, r, g, b);
+                break;
+            case '3': //caso aperte "3"
+                animation_multicolor(valor_led, pio, sm);
+                break;
+            case '4': //caso aperte "4"
+                cacto(valor_led, pio, sm, r, g, b);
+                break;
+            case '5': //caso aperte "5"
+                animation3(valor_led, pio, sm, r, g, b);
+                break;  
+            case 'A': //caso aperte "A"
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
-            case 'B':
+            case 'B': //caso aperte "B"
                 todos_azul(luz_total, valor_led, pio, sm, r, g, b);
                 break;
-            case 'C':
+            case 'C': //caso aperte "C"
                 todos_vermelho(luz_80_total, valor_led, pio, sm, r, g, b);
                 break;
-            case 'D':
+            case 'D': //caso aperte "D"
                 todos_verde(luz_50_total, valor_led, pio, sm, r, g, b);
                 break;
-            case '#':
+            case '#': //caso aperte "#"
                 todos_branco(luz_20_total, valor_led, pio, sm, r, g, b);
                 break;
             default: // Para outras teclas ou nenhuma tecla pressionada
