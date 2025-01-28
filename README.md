@@ -61,7 +61,7 @@ Desenvolvedores:
 Contribuições:
 
 - Helder: Programou o arquivo diagram.json para a simulação das animações na Matriz de Leds, ajustou o código "pio_matrix.c" para os LEDs acenderem de acordo com os botões pressionados no teclado matricial. Adicionou a animação do coração batendo quando pressionado a tecla 1 e adicionou a funcionalidade das teclas A, B, C, D e #.
-- --Adicionar comentario.--
+- Kauan: Adicionou a animação do cacto crescendo ao pressionar a tecla 4.
 - --Adicionar comentario.--
 - --Adicionar comentario.-- 
 - --Adicionar comentario.-- 
