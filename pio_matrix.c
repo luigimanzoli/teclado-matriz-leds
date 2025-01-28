@@ -26,45 +26,47 @@ double desenho_apagado[25] = {
     0.0, 0.0, 0.0, 0.0, 0.0
 };
 
-//desenho muito pequeno de coracao
-double desenho_mt_pequeno[25] = {
+double desenhos_coracao[5][25] = {
+//desenho com intensidade muito baixa de coracao
+    {
     0.0, 0.1, 0.0, 0.1, 0.0,
     0.1, 0.0, 0.1, 0.0, 0.1,
     0.1, 0.0, 0.0, 0.0, 0.1,
     0.0, 0.1, 0.0, 0.1, 0.0,
     0.0, 0.0, 0.1, 0.0, 0.0
-};
-//desenho pequeno de coracao
-double desenho_pequeno[25] = {
+},
+//desenho com intensidade baixa de coracao
+ {
     0.0, 0.3, 0.0, 0.3, 0.0,
     0.3, 0.0, 0.3, 0.0, 0.3,
     0.3, 0.0, 0.0, 0.0, 0.3,
     0.0, 0.3, 0.0, 0.3, 0.0,
     0.0, 0.0, 0.3, 0.0, 0.0
-};
-//desenho de coracao
-double desenho_medio[25] = {
+},
+//desenho com intensidade media de coracao
+{
     0.0, 0.5, 0.0, 0.5, 0.0,
     0.5, 0.0, 0.5, 0.0, 0.5,
     0.5, 0.0, 0.0, 0.0, 0.5,
     0.0, 0.5, 0.0, 0.5, 0.0,
     0.0, 0.0, 0.5, 0.0, 0.0
-};
-//desenho grande de coracao
-double desenho_grande[25] = {
+},
+//desenho com intensidade alta de coracao
+{
     0.0, 0.7, 0.0, 0.7, 0.0,
     0.7, 0.0, 0.7, 0.0, 0.7,
     0.7, 0.0, 0.0, 0.0, 0.7,
     0.0, 0.7, 0.0, 0.7, 0.0,
     0.0, 0.0, 0.7, 0.0, 0.0
-};
-//desenho mt grande de coracao
-double desenho_mt_grande[25] = {
+},
+//desenho com intensidade muito alta de coracao
+ {
     0.0, 0.9, 0.0, 0.9, 0.0,
     0.9, 0.0, 0.9, 0.0, 0.9,
     0.9, 0.0, 0.0, 0.0, 0.9,
     0.0, 0.9, 0.0, 0.9, 0.0,
     0.0, 0.0, 0.9, 0.0, 0.0
+ }
 };
 //ativando todas as cores
 double luz_total[25] = {
@@ -198,29 +200,15 @@ void configurar_pio(PIO pio, uint *offset, uint *sm) {
 }
 
 // Realiza a animação do coração batendo
-void animacao_coracao(double *desenho_mt_pequeno, double *desenho_pequeno, double *desenho_medio, double *desenho_grande, 
-                      double *desenho_mt_grande, double *desenho_apagado, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
-    for (int j = 0; j < 6; j++) //quantidade de vezes que ele batera
-     {
-      desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_medio, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_grande, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_mt_grande, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_grande, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_medio, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
+void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
+    int sequencia[] = {0, 1, 2, 3, 4, 3, 2, 1, 0}; // Ordem dos desenhos do coração
+    for (int j = 0; j < 6; j++) { // Quantidade de vezes que o coração bate
+        for (int i = 0; i < sizeof(sequencia) / sizeof(sequencia[0]); i++) {
+            desenho_pio(desenhos_coracao[sequencia[i]], valor_led, pio, sm, r, g, b);
+            sleep_ms(200);
+        }
     }
+    // Exibe o desenho apagado ao final
     desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
     sleep_ms(200);
 }
@@ -267,10 +255,8 @@ int main() {
 
         switch (tecla) {
             case '1': // Caso o usuário aperte "1" 
-                animacao_coracao(desenho_mt_pequeno, desenho_pequeno, desenho_medio, desenho_grande, 
-                                 desenho_mt_grande, desenho_apagado, valor_led, pio, sm, r, g, b);
-                break;
-            
+                animacao_coracao(valor_led, pio, sm, r, g, b);
+                break; 
             case 'A':
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
