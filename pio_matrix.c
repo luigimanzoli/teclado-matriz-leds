@@ -161,68 +161,58 @@ void configurar_pio(PIO pio, uint *offset, uint *sm) {
 // Realiza a animação do coração batendo
 void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
     //desenho muito pequeno de coracao
-    double desenho_mt_pequeno[25] = {
-        0.0, 0.1, 0.0, 0.1, 0.0,
-        0.1, 0.0, 0.1, 0.0, 0.1,
-        0.1, 0.0, 0.0, 0.0, 0.1,
-        0.0, 0.1, 0.0, 0.1, 0.0,
-        0.0, 0.0, 0.1, 0.0, 0.0
-    };
-    //desenho pequeno de coracao
-    double desenho_pequeno[25] = {
-        0.0, 0.3, 0.0, 0.3, 0.0,
-        0.3, 0.0, 0.3, 0.0, 0.3,
-        0.3, 0.0, 0.0, 0.0, 0.3,
-        0.0, 0.3, 0.0, 0.3, 0.0,
-        0.0, 0.0, 0.3, 0.0, 0.0
-    };
-    //desenho de coracao
-    double desenho_medio[25] = {
-        0.0, 0.5, 0.0, 0.5, 0.0,
-        0.5, 0.0, 0.5, 0.0, 0.5,
-        0.5, 0.0, 0.0, 0.0, 0.5,
-        0.0, 0.5, 0.0, 0.5, 0.0,
-        0.0, 0.0, 0.5, 0.0, 0.0
-    };
-    //desenho grande de coracao
-    double desenho_grande[25] = {
-        0.0, 0.7, 0.0, 0.7, 0.0,
-        0.7, 0.0, 0.7, 0.0, 0.7,
-        0.7, 0.0, 0.0, 0.0, 0.7,
-        0.0, 0.7, 0.0, 0.7, 0.0,
-        0.0, 0.0, 0.7, 0.0, 0.0
-    };
-    //desenho mt grande de coracao
-    double desenho_mt_grande[25] = {
-        0.0, 0.9, 0.0, 0.9, 0.0,
-        0.9, 0.0, 0.9, 0.0, 0.9,
-        0.9, 0.0, 0.0, 0.0, 0.9,
-        0.0, 0.9, 0.0, 0.9, 0.0,
-        0.0, 0.0, 0.9, 0.0, 0.0
-    };
+   double desenhos_coracao[5][25] = {
+//desenho com intensidade muito baixa de coracao
+    {
+    0.0, 0.1, 0.0, 0.1, 0.0,
+    0.1, 0.0, 0.1, 0.0, 0.1,
+    0.1, 0.0, 0.0, 0.0, 0.1,
+    0.0, 0.1, 0.0, 0.1, 0.0,
+    0.0, 0.0, 0.1, 0.0, 0.0
+},
+//desenho com intensidade baixa de coracao
+ {
+    0.0, 0.3, 0.0, 0.3, 0.0,
+    0.3, 0.0, 0.3, 0.0, 0.3,
+    0.3, 0.0, 0.0, 0.0, 0.3,
+    0.0, 0.3, 0.0, 0.3, 0.0,
+    0.0, 0.0, 0.3, 0.0, 0.0
+},
+//desenho com intensidade media de coracao
+{
+    0.0, 0.5, 0.0, 0.5, 0.0,
+    0.5, 0.0, 0.5, 0.0, 0.5,
+    0.5, 0.0, 0.0, 0.0, 0.5,
+    0.0, 0.5, 0.0, 0.5, 0.0,
+    0.0, 0.0, 0.5, 0.0, 0.0
+},
+//desenho com intensidade alta de coracao
+{
+    0.0, 0.7, 0.0, 0.7, 0.0,
+    0.7, 0.0, 0.7, 0.0, 0.7,
+    0.7, 0.0, 0.0, 0.0, 0.7,
+    0.0, 0.7, 0.0, 0.7, 0.0,
+    0.0, 0.0, 0.7, 0.0, 0.0
+},
+//desenho com intensidade muito alta de coracao
+ {
+    0.0, 0.9, 0.0, 0.9, 0.0,
+    0.9, 0.0, 0.9, 0.0, 0.9,
+    0.9, 0.0, 0.0, 0.0, 0.9,
+    0.0, 0.9, 0.0, 0.9, 0.0,
+    0.0, 0.0, 0.9, 0.0, 0.0
+ }
+   };
 
 
-    for (int j = 0; j < 6; j++) //quantidade de vezes que ele batera
-     {
-      desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_medio, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_grande, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_mt_grande, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_grande, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_medio, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
-        desenho_pio(desenho_mt_pequeno, valor_led, pio, sm, r, g, b);
-        sleep_ms(200);
+int sequencia[] = {0, 1, 2, 3, 4, 3, 2, 1, 0}; // Ordem dos desenhos do coração
+    for (int j = 0; j < 6; j++) { // Quantidade de vezes que o coração bate
+        for (int i = 0; i < sizeof(sequencia) / sizeof(sequencia[0]); i++) {
+            desenho_pio(desenhos_coracao[sequencia[i]], valor_led, pio, sm, r, g, b);
+            sleep_ms(200);
+        }
     }
+    // Exibe o desenho apagado ao final
     desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
     sleep_ms(200);
 }
@@ -488,31 +478,31 @@ int main() {
             case '1': // Caso o usuário aperte "1" 
                 animacao_coracao(valor_led, pio, sm, r, g, b);
                 break;
-            case '2':
+            case '2': //caso aperte "2"
                 animation2(valor_led, pio, sm, r, g, b);
                 break;
-            case '3':
+            case '3': //caso aperte "3"
                 animation_multicolor(valor_led, pio, sm);
                 break;
-            case '4':
+            case '4': //caso aperte "4"
                 cacto(valor_led, pio, sm, r, g, b);
                 break;
-            case '5': //caso aperte "3"
+            case '5': //caso aperte "5"
                 animation3(valor_led, pio, sm, r, g, b);
                 break;  
-            case 'A':
+            case 'A': //caso aperte "A"
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
-            case 'B':
+            case 'B': //caso aperte "B"
                 todos_azul(luz_total, valor_led, pio, sm, r, g, b);
                 break;
-            case 'C':
+            case 'C': //caso aperte "C"
                 todos_vermelho(luz_80_total, valor_led, pio, sm, r, g, b);
                 break;
-            case 'D':
+            case 'D': //caso aperte "D"
                 todos_verde(luz_50_total, valor_led, pio, sm, r, g, b);
                 break;
-            case '#':
+            case '#': //caso aperte "#"
                 todos_branco(luz_20_total, valor_led, pio, sm, r, g, b);
                 break;
             default: // Para outras teclas ou nenhuma tecla pressionada
