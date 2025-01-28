@@ -10,6 +10,10 @@
 //arquivo .pio
 #include "pio_matrix.pio.h"
 
+void npSetLED(int index, uint8_t r, uint8_t g, uint8_t b);
+void npWrite(PIO pio, uint sm);
+
+
 //número de LEDs
 #define NUM_PIXELS 25
 
@@ -300,6 +304,32 @@ void todos_branco(double *luz_20_total, uint32_t valor_led, PIO pio, uint sm, do
     desenho_branco(luz_50_total, valor_led, pio, sm, r, g, b);
 }
 
+// Estrutura para definir um pixel RGB
+typedef struct {
+    uint8_t R, G, B;
+} pixel_t;
+
+// Buffer para armazenar o estado dos LEDs
+pixel_t leds[NUM_PIXELS];
+
+// Função para configurar um LED com valores RGB
+void npSetLED(int index, uint8_t r, uint8_t g, uint8_t b) {
+    if (index >= 0 && index < NUM_PIXELS) {
+        leds[index].R = r;
+        leds[index].G = g;
+        leds[index].B = b;
+    }
+}
+
+// Função para enviar os valores dos LEDs para a matriz
+void npWrite(PIO pio, uint sm) {
+    for (int i = 0; i < NUM_PIXELS; i++) {
+        uint32_t pixel_data = (leds[i].G << 24) | (leds[i].R << 16) | (leds[i].B << 8);
+        pio_sm_put_blocking(pio, sm, pixel_data);
+    }
+    sleep_us(80); // Tempo de reset para o protocolo WS2812
+}
+
 // Função principal
 int main() {
     PIO pio = pio0;
@@ -346,6 +376,19 @@ int main() {
             case '#':
                 todos_branco(luz_20_total, valor_led, pio, sm, r, g, b);
                 break;
+           case '0': // Novo caso para a tecla "0"
+    for (int linha = 0; linha < 2; linha++) { // Duas primeiras fileiras
+        for (int coluna = 0; coluna < 5; coluna++) { // 5 LEDs por linha
+            int posicao = linha * 5 + coluna; // Calcula a posição do LED
+            npSetLED(posicao, 0, 0, 255); // Azul: RGB = (0, 0, 255)
+        }
+    }
+    npWrite(pio, sm); // Atualiza os LEDs com o novo estado
+    break;
+
+    break;
+    
+
             default: // Para outras teclas ou nenhuma tecla pressionada
                 printf("Default acionado. Valor tecla: %c (ASCII: %d)\n", tecla, tecla);
                 desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
