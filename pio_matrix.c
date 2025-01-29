@@ -450,7 +450,6 @@ void animation_multicolor(uint32_t valor_led, PIO pio, uint sm) {
     }
 }
 
-
 // Função principal
 int main() {
     PIO pio = pio0;
@@ -505,6 +504,9 @@ int main() {
                 break;
             case '#': //caso aperte "#"
                 todos_branco(luz_20_total, valor_led, pio, sm, r, g, b);
+                break;
+            case '*': //caso aperte *
+                reset_usb_boot(0, 0);
                 break;
             default: // Para outras teclas ou nenhuma tecla pressionada
                 printf("Default acionado. Valor tecla: %c (ASCII: %d)\n", tecla, tecla);
