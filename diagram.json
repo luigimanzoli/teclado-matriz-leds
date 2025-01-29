@@ -51,7 +51,14 @@
     { "type": "wokwi-gnd", "id": "gnd4", "top": -172.8, "left": -384.6, "attrs": {} },
     { "type": "wokwi-vcc", "id": "vcc4", "top": -277.64, "left": -384, "attrs": {} },
     { "type": "wokwi-vcc", "id": "vcc5", "top": -364.04, "left": -48, "attrs": {} },
-    { "type": "wokwi-gnd", "id": "gnd5", "top": -268.8, "left": -48.6, "attrs": {} }
+    { "type": "wokwi-gnd", "id": "gnd5", "top": -268.8, "left": -48.6, "attrs": {} },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": 136.8,
+      "left": 251.4,
+      "attrs": { "volume": "0.1" }
+    }
   ],
   "connections": [
     [ "pico:GP0", "$serialMonitor:RX", "", [] ],
@@ -148,7 +155,9 @@
     [ "rgb23:VSS", "gnd5:GND", "green", [ "v0" ] ],
     [ "rgb24:VSS", "gnd5:GND", "green", [ "v0" ] ],
     [ "rgb25:VSS", "gnd5:GND", "green", [ "v0" ] ],
-    [ "rgb1:DIN", "pico:GP9", "green", [ "h56.8", "v19.2" ] ]
+    [ "rgb1:DIN", "pico:GP9", "green", [ "h56.8", "v19.2" ] ],
+    [ "pico:GP21", "bz1:2", "red", [ "h77.11", "v115.2", "h106" ] ],
+    [ "bz1:1", "pico:GND.6", "black", [ "v19.2", "h-86.4", "v-115.2" ] ]
   ],
   "dependencies": {}
 }

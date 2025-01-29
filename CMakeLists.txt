@@ -52,6 +52,8 @@ target_sources(pio_matrix PRIVATE pio_matrix.c)
 target_link_libraries(pio_matrix PRIVATE
         pico_stdlib
         hardware_pio
+        hardware_timer
+        hardware_pwm
 	    hardware_adc
         pico_bootrom)
 

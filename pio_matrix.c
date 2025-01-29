@@ -6,20 +6,24 @@
 #include "hardware/clocks.h"
 #include "hardware/adc.h"
 #include "pico/bootrom.h"
+#include "hardware/pwm.h"
 
 //arquivo .pio
 #include "pio_matrix.pio.h"
 
+
 void npSetLED(int index, uint8_t r, uint8_t g, uint8_t b);
 void npWrite(PIO pio, uint sm);
 
+// Defina o pino do buzzer
+#define PIN_BUZZER 21
+const uint32_t freq = 350; // Frequência do buzzer em Hz
 
 //número de LEDs
 #define NUM_PIXELS 25
 
 //pino de saída
 #define OUT_PIN 9
-
 
 //todos apagados
 double desenho_apagado[25] = {
@@ -162,6 +166,22 @@ void configurar_pio(PIO pio, uint *offset, uint *sm) {
     pio_matrix_program_init(pio, *sm, *offset, OUT_PIN);
 }
 
+void emitir_sinal_sonoro() {
+    gpio_set_function(PIN_BUZZER, GPIO_FUNC_PWM);
+    int slice_num = pwm_gpio_to_slice_num(PIN_BUZZER); // Obtenção do slice de PWM
+    
+    uint32_t clk_sys = clock_get_hz(clk_sys); // Frequência do sistema
+    uint16_t wrap = clk_sys / freq - 1; // Cálculo do valor de wrap
+    
+    pwm_set_wrap(slice_num, wrap); // Configuração do valor de wrap
+    pwm_set_gpio_level(PIN_BUZZER, wrap / 2); // Configuração do nível de PWM
+    pwm_set_enabled(slice_num, true); // Liga o buzzer
+    
+    sleep_ms(200); // Emite o som por 200 ms
+    
+    pwm_set_enabled(slice_num, false); // Desliga o buzzer
+}
+
 // Realiza a animação do coração batendo
 void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
     //desenho muito pequeno de coracao
@@ -210,11 +230,12 @@ void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, 
 
 
 int sequencia[] = {0, 1, 2, 3, 4, 3, 2, 1, 0}; // Ordem dos desenhos do coração
-    for (int j = 0; j < 6; j++) { // Quantidade de vezes que o coração bate
+    for (int j = 0; j < 3; j++) { // Quantidade de vezes que o coração bate
         for (int i = 0; i < sizeof(sequencia) / sizeof(sequencia[0]); i++) {
             desenho_pio(desenhos_coracao[sequencia[i]], valor_led, pio, sm, r, g, b);
             sleep_ms(200);
         }
+        emitir_sinal_sonoro();
     }
     // Exibe o desenho apagado ao final
     desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
@@ -409,6 +430,10 @@ for (int frame = 0; frame < 5; frame++){
 }
 
 void animation_multicolor(uint32_t valor_led, PIO pio, uint sm) {
+
+    emitir_sinal_sonoro();
+
+
     double frames[5][25][3] = {
         // Frame 1
         {{1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0},
@@ -580,6 +605,10 @@ int main() {
                 }
                 npWrite(pio, sm); // Atualiza os LEDs com o novo estado
                         break;
+
+            case '*': //caso aperte *
+                reset_usb_boot(0, 0);
+                break;
 
             default: // Para outras teclas ou nenhuma tecla pressionada
                 printf("Default acionado. Valor tecla: %c (ASCII: %d)\n", tecla, tecla);
