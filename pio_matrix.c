@@ -530,6 +530,7 @@ char leitura_teclado() {
     }
     return numero; // Retorna a tecla pressionada
 }
+
 // Desenho inicial da estrela (5x5)
 double frame1[25] = {0.0, 0.0, 1.0, 0.0, 0.0,
                      0.0, 0.0, 0.0, 0.0, 0.0,
@@ -617,6 +618,7 @@ int main() {
             case '5': //caso aperte "5"
                 animation3(valor_led, pio, sm, r, g, b);
                 break;
+
             case '6': 
                 desenho_estrela_pio(frame1, pio, sm, 1.0, 1.0, 0.0);
                 desenho_estrela_pio(frame2, pio, sm, 1.0, 1.0, 0.0);
@@ -624,6 +626,7 @@ int main() {
                 desenho_estrela_pio(frame4, pio, sm, 1.0, 1.0, 0.0);
                 desenho_estrela_pio(frame5, pio, sm, 1.0, 1.0, 0.0);
                 break;
+            
             case 'A': //caso aperte "A"
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
@@ -668,4 +671,5 @@ int main() {
     }
 
     return 0;
+
 }
