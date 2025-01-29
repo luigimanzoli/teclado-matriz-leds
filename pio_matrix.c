@@ -6,9 +6,18 @@
 #include "hardware/clocks.h"
 #include "hardware/adc.h"
 #include "pico/bootrom.h"
+#include "hardware/pwm.h"
 
 //arquivo .pio
 #include "pio_matrix.pio.h"
+
+
+void npSetLED(int index, uint8_t r, uint8_t g, uint8_t b);
+void npWrite(PIO pio, uint sm);
+
+// Defina o pino do buzzer
+#define PIN_BUZZER 21
+const uint32_t freq = 350; // Frequência do buzzer em Hz
 
 //número de LEDs
 #define NUM_PIXELS 25
@@ -158,6 +167,22 @@ void configurar_pio(PIO pio, uint *offset, uint *sm) {
     pio_matrix_program_init(pio, *sm, *offset, OUT_PIN);
 }
 
+void emitir_sinal_sonoro() {
+    gpio_set_function(PIN_BUZZER, GPIO_FUNC_PWM);
+    int slice_num = pwm_gpio_to_slice_num(PIN_BUZZER); // Obtenção do slice de PWM
+    
+    uint32_t clk_sys = clock_get_hz(clk_sys); // Frequência do sistema
+    uint16_t wrap = clk_sys / freq - 1; // Cálculo do valor de wrap
+    
+    pwm_set_wrap(slice_num, wrap); // Configuração do valor de wrap
+    pwm_set_gpio_level(PIN_BUZZER, wrap / 2); // Configuração do nível de PWM
+    pwm_set_enabled(slice_num, true); // Liga o buzzer
+    
+    sleep_ms(200); // Emite o som por 200 ms
+    
+    pwm_set_enabled(slice_num, false); // Desliga o buzzer
+}
+
 // Realiza a animação do coração batendo
 void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, double b) {
     //desenho muito pequeno de coracao
@@ -211,6 +236,7 @@ int sequencia[] = {0, 1, 2, 3, 4, 3, 2, 1, 0}; // Ordem dos desenhos do coraçã
             desenho_pio(desenhos_coracao[sequencia[i]], valor_led, pio, sm, r, g, b);
             sleep_ms(200);
         }
+        emitir_sinal_sonoro();
     }
     // Exibe o desenho apagado ao final
     desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
@@ -405,6 +431,10 @@ for (int frame = 0; frame < 5; frame++){
 }
 
 void animation_multicolor(uint32_t valor_led, PIO pio, uint sm) {
+
+    emitir_sinal_sonoro();
+
+
     double frames[5][25][3] = {
         // Frame 1
         {{1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0},
@@ -448,6 +478,32 @@ void animation_multicolor(uint32_t valor_led, PIO pio, uint sm) {
         }
         sleep_ms(500); // Tempo de exibição de cada frame
     }
+}
+
+// Estrutura para definir um pixel RGB
+typedef struct {
+    uint8_t R, G, B;
+} pixel_t;
+
+// Buffer para armazenar o estado dos LEDs
+pixel_t leds[NUM_PIXELS];
+
+// Função para configurar um LED com valores RGB
+void npSetLED(int index, uint8_t r, uint8_t g, uint8_t b) {
+    if (index >= 0 && index < NUM_PIXELS) {
+        leds[index].R = r;
+        leds[index].G = g;
+        leds[index].B = b;
+    }
+}
+
+// Função para enviar os valores dos LEDs para a matriz
+void npWrite(PIO pio, uint sm) {
+    for (int i = 0; i < NUM_PIXELS; i++) {
+        uint32_t pixel_data = (leds[i].G << 24) | (leds[i].R << 16) | (leds[i].B << 8);
+        pio_sm_put_blocking(pio, sm, pixel_data);
+    }
+    sleep_us(80); // Tempo de reset para o protocolo WS2812
 }
 
 // Função principal
