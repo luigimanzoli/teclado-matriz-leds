@@ -508,46 +508,57 @@ int main() {
             case '1': // Caso o usuário aperte "1" 
                 animacao_coracao(valor_led, pio, sm, r, g, b);
                 break;
+            
             case '2': //caso aperte "2"
                 animation2(valor_led, pio, sm, r, g, b);
                 break;
+            
             case '3': //caso aperte "3"
                 animation_multicolor(valor_led, pio, sm);
                 break;
+            
             case '4': //caso aperte "4"
                 cacto(valor_led, pio, sm, r, g, b);
                 break;
+            
             case '5': //caso aperte "5"
                 animation3(valor_led, pio, sm, r, g, b);
-                break;  
+                break; 
+            
             case 'A': //caso aperte "A"
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
+            
             case 'B': //caso aperte "B"
                 todos_azul(luz_total, valor_led, pio, sm, r, g, b);
                 break;
+            
             case 'C': //caso aperte "C"
                 todos_vermelho(luz_80_total, valor_led, pio, sm, r, g, b);
                 break;
+            
             case 'D': //caso aperte "D"
                 todos_verde(luz_50_total, valor_led, pio, sm, r, g, b);
                 break;
+            
             case '#': //caso aperte "#"
                 todos_branco(luz_20_total, valor_led, pio, sm, r, g, b);
                 break;
-           case '0': // Novo caso para a tecla "0"
-    for (int linha = 0; linha < 2; linha++) { // Duas primeiras fileiras
-        for (int coluna = 0; coluna < 5; coluna++) { // 5 LEDs por linha
-            int posicao = linha * 5 + coluna; // Calcula a posição do LED
-            npSetLED(posicao, 0, 0, 255); // Azul: RGB = (0, 0, 255)
-        }
-    }
-    npWrite(pio, sm); // Atualiza os LEDs com o novo estado
-    break;
-
-    break;
-    
-
+            
+            case '*': //caso aperte *
+                reset_usb_boot(0, 0);
+                break;
+            
+            case '0': // Novo caso para a tecla "0"
+                for (int linha = 0; linha < 2; linha++) { // Duas primeiras fileiras
+                    for (int coluna = 0; coluna < 5; coluna++) { // 5 LEDs por linha
+                        int posicao = linha * 5 + coluna; // Calcula a posição do LED
+                        npSetLED(posicao, 0, 0, 255); // Azul: RGB = (0, 0, 255)
+                    }
+                }
+                npWrite(pio, sm); // Atualiza os LEDs com o novo estado
+                break;
+            
             default: // Para outras teclas ou nenhuma tecla pressionada
                 printf("Default acionado. Valor tecla: %c (ASCII: %d)\n", tecla, tecla);
                 desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
