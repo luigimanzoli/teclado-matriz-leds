@@ -1,4 +1,4 @@
-#include <stdio.h>
+
 #include <stdlib.h>
 #include <math.h>
 #include "pico/stdlib.h"
@@ -9,6 +9,10 @@
 
 //arquivo .pio
 #include "pio_matrix.pio.h"
+
+void npSetLED(int index, uint8_t r, uint8_t g, uint8_t b);
+void npWrite(PIO pio, uint sm);
+
 
 //número de LEDs
 #define NUM_PIXELS 25
@@ -450,6 +454,58 @@ void animation_multicolor(uint32_t valor_led, PIO pio, uint sm) {
     }
 }
 
+// Estrutura para definir um pixel RGB
+typedef struct {
+    uint8_t R, G, B;
+} pixel_t;
+
+// Buffer para armazenar o estado dos LEDs
+pixel_t leds[NUM_PIXELS];
+
+// Função para configurar um LED com valores RGB
+void npSetLED(int index, uint8_t r, uint8_t g, uint8_t b) {
+    if (index >= 0 && index < NUM_PIXELS) {
+        leds[index].R = r;
+        leds[index].G = g;
+        leds[index].B = b;
+    }
+}
+
+// Função para enviar os valores dos LEDs para a matriz
+void npWrite(PIO pio, uint sm) {
+    for (int i = 0; i < NUM_PIXELS; i++) {
+        uint32_t pixel_data = (leds[i].G << 24) | (leds[i].R << 16) | (leds[i].B << 8);
+        pio_sm_put_blocking(pio, sm, pixel_data);
+    }
+    sleep_us(80); // Tempo de reset para o protocolo WS2812
+}
+
+// Função para leitura do teclado matricial
+char leitura_teclado() {
+    char numero = 'n'; // Valor padrão caso nenhuma tecla seja pressionada
+
+    for (int coluna = 0; coluna < 4; coluna++) {
+        gpio_put(colunas[coluna], 0); // Coluna ativa em nível baixo
+
+        for (int linha = 0; linha < 4; linha++) {
+            if (gpio_get(linhas[linha]) == 0) {
+                numero = teclado[3 - linha][coluna]; // Mapeamento da tecla pressionada
+                while (gpio_get(linhas[linha]) == 0) {
+                    sleep_ms(10); // Espera enquanto a tecla estiver pressionada
+                }
+                break;
+            }
+        }
+
+        gpio_put(colunas[coluna], 1); // Coluna desativada em nível alto
+
+        if (numero != 'n') {
+            break; // Sai do loop se uma tecla foi pressionada
+        }
+    }
+    return numero; // Retorna a tecla pressionada
+}
+
 // Função principal
 int main() {
     PIO pio = pio0;
@@ -478,33 +534,53 @@ int main() {
             case '1': // Caso o usuário aperte "1" 
                 animacao_coracao(valor_led, pio, sm, r, g, b);
                 break;
+
             case '2': //caso aperte "2"
                 animation2(valor_led, pio, sm, r, g, b);
                 break;
+                
             case '3': //caso aperte "3"
                 animation_multicolor(valor_led, pio, sm);
                 break;
+
             case '4': //caso aperte "4"
                 cacto(valor_led, pio, sm, r, g, b);
                 break;
+
             case '5': //caso aperte "5"
                 animation3(valor_led, pio, sm, r, g, b);
-                break;  
+                break;
+
             case 'A': //caso aperte "A"
                 desenho_apagado_total(desenho_apagado, valor_led, pio, sm, r, g, b);
                 break;
+
             case 'B': //caso aperte "B"
                 todos_azul(luz_total, valor_led, pio, sm, r, g, b);
                 break;
+
             case 'C': //caso aperte "C"
                 todos_vermelho(luz_80_total, valor_led, pio, sm, r, g, b);
                 break;
+
             case 'D': //caso aperte "D"
                 todos_verde(luz_50_total, valor_led, pio, sm, r, g, b);
                 break;
+
             case '#': //caso aperte "#"
                 todos_branco(luz_20_total, valor_led, pio, sm, r, g, b);
                 break;
+
+            case '0': // Novo caso para a tecla "0"
+                for (int linha = 0; linha < 2; linha++) { // Duas primeiras fileiras
+                    for (int coluna = 0; coluna < 5; coluna++) { // 5 LEDs por linha
+                    int posicao = linha * 5 + coluna; // Calcula a posição do LED
+                    npSetLED(posicao, 0, 0, 255); // Azul: RGB = (0, 0, 255)
+                    }
+                }
+                npWrite(pio, sm); // Atualiza os LEDs com o novo estado
+                        break;
+
             default: // Para outras teclas ou nenhuma tecla pressionada
                 printf("Default acionado. Valor tecla: %c (ASCII: %d)\n", tecla, tecla);
                 desenho_pio(desenho_apagado, valor_led, pio, sm, r, g, b);
@@ -515,30 +591,4 @@ int main() {
     }
 
     return 0;
-}
-// Função para leitura do teclado matricial
-char leitura_teclado() {
-    char numero = 'n'; // Valor padrão caso nenhuma tecla seja pressionada
-
-    for (int coluna = 0; coluna < 4; coluna++) {
-        gpio_put(colunas[coluna], 0); // Coluna ativa em nível baixo
-
-        for (int linha = 0; linha < 4; linha++) {
-            if (gpio_get(linhas[linha]) == 0) {
-                numero = teclado[3 - linha][coluna]; // Mapeamento da tecla pressionada
-                while (gpio_get(linhas[linha]) == 0) {
-                    sleep_ms(10); // Espera enquanto a tecla estiver pressionada
-                }
-                break;
-            }
-        }
-
-        gpio_put(colunas[coluna], 1); // Coluna desativada em nível alto
-
-        if (numero != 'n') {
-            break; // Sai do loop se uma tecla foi pressionada
-        }
-    }
-
-    return numero; // Retorna a tecla pressionada
 }
