@@ -1,5 +1,4 @@
-
-<h1 align="center">Embarcatec | Segunda Atividade Em Grupo</h1>
+<h1 align="center">Embarcatech | Segunda Atividade Em Grupo</h1>
 
 Objetivo do Projeto:
 
@@ -30,19 +29,19 @@ Tecnologias:
 
 Funcionalidades Implementadas:
 
-- Botão 1: Acende um coracao pulsando.
+- Botão 1: Acende um coracao pulsando e realizando sinal sonoro.
 - Botão 2: Animação de um pixel no centro dos LEDs se extendendo até as bordas.
-- Botão 3: Animação de linhas coloridas descendo.
+- Botão 3: Animação de linhas coloridas descendo e realizando sinal sonoro.
 - Botão 4: Animação de um cacto crescendo.
-- Botão 5: --Adicionar comentario.--
-- Botão 0: Animação de leds azuis acendendo
-- Botão 7: --Adicionar comentario.--
-- Botão 8: --Adicionar comentario.--
+- Botão 5: Animação de explosão azul.
+- Botão 6: Animação de estrela rotacionando.
+- Botão 0: Animação de leds azuis acendendo.
 - Botão A: Todos os LEDs desligados.
 - Botão B: Todos os LEDs ligados na cor azul, no nível de intensidade de 100% da luminosidade máxima.
 - Botão C: Todos os LEDs ligados na cor vermelha, no nível de intensidade de 80% da luminosidade máxima.
 - Botão D: Todos os LEDs ligados na cor verde, no nível de intensidade de 50% da luminosidade máxima.
 - Botão #: Todos os LEDs ligados na cor branca, no nível de intensidade de 20% da luminosidade máxima.
+- Botão *: Botão de Reset.
 
 Desenvolvedores:
  
@@ -54,7 +53,7 @@ Desenvolvedores:
     <td align="center"> <sub><b> Kauan Carneiro Almeida </b></td>
     <td align="center"> <sub><b> Italo Rosário de Freitas </b></td>
     <td align="center"> <sub><b> Luigi Manzoli Almeida Lopez </b></td>
-    <td align="center"> <sub><b> Andréia Conceição Sá Teles </b></td>
+    <td align="center"> <sub><b> Andréia Conceição Sá Teles </b></td>
     </tr>
 </table>
 
@@ -65,11 +64,8 @@ Contribuições:
 - Willomar: Adicionou animação de linhas coloridas ao botão 3 e adicionou funcionalidade de ligar Buzzer.
 - Kauan: Adiocionou animação do cacto crescendo ao pressionar o botão 4. 
 - Andréia: Adicionou animação dos leds azuis acendendo ao pressionar o botão 0.
-- --Adicionar comentario.--
+- Rosário: Adicionou animação da estrela rotacionando.
+- Maria Paula: Adicionou animação de explosão azul.
 
 Demonstração: 
 - Para ver o funcionamento do projeto, acesse o vídeo de demonstração a seguir:  --Adicionar Video.--
-
-    
-
-   
