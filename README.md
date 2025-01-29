@@ -31,9 +31,9 @@ Tecnologias:
 Funcionalidades Implementadas:
 
 - Botão 1: Acende um coracao pulsando.
-- Botão 2: --Adicionar comentario.--
-- Botão 3: --Adicionar comentario.--
-- Botão 4: --Adicionar comentario.--
+- Botão 2: Animação de um pixel no centro dos LEDs se extendendo até as bordas.
+- Botão 3: Animação de linhas coloridas descendo.
+- Botão 4: Animação de um cacto crescendo.
 - Botão 5: --Adicionar comentario.--
 - Botão 6: --Adicionar comentario.--
 - Botão 7: --Adicionar comentario.--
@@ -48,7 +48,7 @@ Desenvolvedores:
  
 <table>
   <tr>
-    <td align="center">  <sub><b> Helder Araujo Silva </b></td>
+    <td align="center"> <sub><b> Helder Araujo Silva </b></td>
     <td align="center"> <sub><b> Maria Paula Ferra Cabral de Aguiar </b></td>
     <td align="center"> <sub><b> Willomar Soares dos Santos </b></td>
     <td align="center"> <sub><b> Kauan Carneiro Almeida </b></td>
@@ -61,9 +61,9 @@ Desenvolvedores:
 Contribuições:
 
 - Helder: Programou o arquivo diagram.json para a simulação das animações na Matriz de Leds, ajustou o código "pio_matrix.c" para os LEDs acenderem de acordo com os botões pressionados no teclado matricial. Adicionou a animação do coração batendo quando pressionado a tecla 1 e adicionou a funcionalidade das teclas A, B, C, D e #.
-- --Adicionar comentario.--
-- --Adicionar comentario.--
-- --Adicionar comentario.-- 
+- Luigi: Otimização geral do código, adição da animação do botão 2 e modificação e adaptação do código da main branch com o merge das diversas branchs do projeto.
+- Willomar: Adicionou animação de linhas coloridas ao botão 3.
+- Kauan: Adiocionou animação do cacto crescendo ao pressionar o botão 4. 
 - --Adicionar comentario.-- 
 - --Adicionar comentario.--
 
