@@ -35,7 +35,7 @@ Funcionalidades Implementadas:
 - Botão 3: Animação de linhas coloridas descendo.
 - Botão 4: Animação de um cacto crescendo.
 - Botão 5: --Adicionar comentario.--
-- Botão 6: --Adicionar comentario.--
+- Botão 0: Animação de leds azuis acendendo
 - Botão 7: --Adicionar comentario.--
 - Botão 8: --Adicionar comentario.--
 - Botão A: Todos os LEDs desligados.

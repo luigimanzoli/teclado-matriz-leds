@@ -231,7 +231,7 @@ void animacao_coracao(uint32_t valor_led, PIO pio, uint sm, double r, double g, 
 
 
 int sequencia[] = {0, 1, 2, 3, 4, 3, 2, 1, 0}; // Ordem dos desenhos do coração
-    for (int j = 0; j < 6; j++) { // Quantidade de vezes que o coração bate
+    for (int j = 0; j < 3; j++) { // Quantidade de vezes que o coração bate
         for (int i = 0; i < sizeof(sequencia) / sizeof(sequencia[0]); i++) {
             desenho_pio(desenhos_coracao[sequencia[i]], valor_led, pio, sm, r, g, b);
             sleep_ms(200);
