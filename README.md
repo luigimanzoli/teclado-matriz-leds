@@ -68,4 +68,4 @@ Contribuições:
 - Maria Paula: Adicionou animação de explosão azul.
 
 Demonstração: 
-- Para ver o funcionamento do projeto, acesse o vídeo de demonstração a seguir:  --Adicionar Video.--
+- Para ver o funcionamento do projeto, acesse o vídeo de demonstração a seguir: https://youtu.be/kGFm2oOE7EA
