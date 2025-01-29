@@ -1,1 +1,1 @@
-Leitura de botão no GPIO 6 e acionamento da Matriz de Leds pela GPIO 07.
+adicionei ao código a animação de acender 10 leds na cor azul ao apertar a tecla 0
