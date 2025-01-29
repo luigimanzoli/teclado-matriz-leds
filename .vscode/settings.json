@@ -38,9 +38,17 @@
     "raspberry-pi-pico.ninjaPath": "${HOME}/.pico-sdk/ninja/v1.12.1/ninja",
     "files.associations": {
         "*.embeddedhtml": "html",
+<<<<<<< HEAD
         "stdio.h": "c",
         "math.h": "c",
         "pio_matrix.pio.h": "c",
         "stdlib.h": "c"
+=======
+        "*.sqlbook": "sql",
+        "*.ndjson": "jsonl",
+        "*.dbclient-js": "javascript",
+        "bootrom.h": "c",
+        "pio_matrix.pio.h": "c"
+>>>>>>> 4cdd06f5271df5c509b7b48746ae365ef8e7179b
     }
 }
